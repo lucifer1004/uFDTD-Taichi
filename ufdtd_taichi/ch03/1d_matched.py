@@ -8,8 +8,11 @@ ez = ti.field(dtype=ti.f64, shape=(size))
 hy = ti.field(dtype=ti.f64, shape=(size-1))
 ceze = ti.field(dtype=ti.f64, shape=(size))
 cezh = ti.field(dtype=ti.f64, shape=(size))
+chyh = ti.field(dtype=ti.f64, shape=(size-1))
+chye = ti.field(dtype=ti.f64, shape=(size-1))
 imp0 = 377.0
 loss = 0.01
+loss_layer = 180
 
 
 @ti.kernel
@@ -18,16 +21,26 @@ def init():
         if i < size // 2:
             ceze[i] = 1.0
             cezh[i] = imp0
+        elif i < loss_layer:
+            ceze[i] = 1.0
+            cezh[i] = imp0 / 9.0
         else:
             ceze[i] = (1.0 - loss) / (1.0 + loss)
             cezh[i] = imp0 / 9.0 / (1.0 + loss)
+    for i in chyh:
+        if i < loss_layer:
+            chyh[i] = 1.0
+            chye[i] = 1.0 / imp0
+        else:
+            chyh[i] = (1.0 - loss) / (1.0 + loss)
+            chye[i] = 1.0 / imp0 / (1.0 + loss)
 
 
 @ti.kernel
 def update(t: int):  # do time stepping
     # update magnetic field
     for mm in ti.static(range(size - 1)):
-        hy[mm] += (ez[mm + 1] - ez[mm]) / imp0
+        hy[mm] = chyh[mm] * hy[mm] + chye[mm] * (ez[mm + 1] - ez[mm])
 
     # correction for Hy adjacent to TFSF boundary
     hy[49] -= ti.exp(-(t - 30) ** 2 / 100) / imp0
@@ -52,7 +65,7 @@ def color(v: float):
 
 width = 1280
 height = 320
-gui = ti.GUI("1D Lossy", res=(width, height))
+gui = ti.GUI("1D Total Field / Scattered Field", res=(width, height))
 t = 0
 init()
 

@@ -46,3 +46,12 @@
 - ABC at the left boundary
 - TFSF boundary between `hy[49]` and `ez[50]`
 - A lossy dielectric material starting at `ez[100]`
+
+### 1D Matched
+
+![1D Matched](gif/1d_matched.gif)
+
+- ABC at the left boundary
+- TFSF boundary between `hy[49]` and `ez[50]`
+- A dielectric material starting at `ez[100]`
+- A lossy dielectric material starting at `ez[180]`, working as a matching layer
