@@ -32,7 +32,7 @@ def color(v: float):
 
 width = 1280
 height = 320
-gui = ti.GUI("1D bare bones", res=(width, height))
+gui = ti.GUI("1D Additive", res=(width, height))
 t = 0
 
 while gui.running:

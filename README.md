@@ -19,3 +19,11 @@
 - PEC at the left boundary
 - PMC at the right boundary
 - Additive source at node 50
+
+### 1D TFSF (Total Field / Scattered Field)
+
+![1D TFSF](gif/1d_tfsf.gif)
+
+- ABC at the left boundary
+- ABC at the right boundary
+- TFSF boundary between `hy[49]` and `ez[50]`

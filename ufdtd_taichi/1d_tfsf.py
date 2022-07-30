@@ -1,6 +1,5 @@
 import taichi as ti
 import numpy as np
-import os
 
 ti.init(arch=ti.cuda)
 
@@ -12,17 +11,25 @@ imp0 = 377.0
 
 @ti.kernel
 def update(t: int):  # do time stepping
+    # simple ABC for hy[size - 1]
+    hy[size - 1] = hy[size - 2]
+    
     # update magnetic field
     for mm in ti.static(range(size - 1)):
         hy[mm] += (ez[mm + 1] - ez[mm]) / imp0
+        
+    # correction for Hy adjacent to TFSF boundary
+    hy[49] -= ti.exp(-(t - 30) ** 2 / 100) / imp0
+    
+    # simple ABC for ez[0]
+    ez[0] = ez[1]
 
     # update electric field
     for mm in ti.static(range(1, size)):
         ez[mm] += (hy[mm] - hy[mm - 1]) * imp0
 
-    # hardwire a source node
-    ez[0] = ti.exp(-(t - 30) ** 2 / 100)
-    print(ez[50])
+    # correction for Ez adjacent to TFSF boundary
+    ez[50] += ti.exp(-(t + 0.5 - (-0.5) - 30) ** 2 / 100)
 
 
 def color(v: float):
@@ -34,12 +41,9 @@ def color(v: float):
 
 width = 1280
 height = 320
-gui = ti.GUI("1D Bare Bones", res=(width, height))
+gui = ti.GUI("1D Total Field / Scattered Field", res=(width, height))
 t = 0
 
-# Comment out `vm` related code to record a video.
-# vm = ti.tools.VideoManager(
-#     output_dir='gif', framerate=24, automatic_build=True)
 while gui.running:
     t += 1
     update(t)
@@ -53,5 +57,4 @@ while gui.running:
     colors = np.array([color(hi) for hi in hy.to_numpy() * imp0])
     gui.circles(pos=np.array([((i + 0.5) / size, 0.8)
                               for i in range(size)]), radius=3, color=colors)
-    # vm.write_frame(gui.get_image())
     gui.show()
