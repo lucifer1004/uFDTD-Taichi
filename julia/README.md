@@ -1,6 +1,4 @@
-# UFDTD-Taichi
-
-> See also the [Julia](./julia/README.md) version.
+# UFDTD-Taichi (Julia version)
 
 *Understanding the Finite-Difference Time-Domain Method*, implemented in [Taichi](https://taichi-lang.org/).
 

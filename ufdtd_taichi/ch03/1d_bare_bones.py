@@ -1,6 +1,5 @@
 import taichi as ti
 import numpy as np
-import os
 
 ti.init(arch=ti.cuda)
 
