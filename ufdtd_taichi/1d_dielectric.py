@@ -5,7 +5,7 @@ ti.init(arch=ti.cuda)
 
 size = 200
 ez = ti.field(dtype=ti.f64, shape=(size))
-hy = ti.field(dtype=ti.f64, shape=(size))
+hy = ti.field(dtype=ti.f64, shape=(size-1))
 eps_R = ti.field(dtype=ti.f64, shape=(size))
 imp0 = 377.0
 
@@ -21,9 +21,6 @@ def init():
 
 @ti.kernel
 def update(t: int):  # do time stepping
-    # simple ABC for hy[size - 1]
-    hy[size - 1] = hy[size - 2]
-
     # update magnetic field
     for mm in ti.static(range(size - 1)):
         hy[mm] += (ez[mm + 1] - ez[mm]) / imp0
@@ -31,8 +28,9 @@ def update(t: int):  # do time stepping
     # correction for Hy adjacent to TFSF boundary
     hy[49] -= ti.exp(-(t - 30) ** 2 / 100) / imp0
 
-    # simple ABC for ez[0]
+    # simple ABC for ez[0] and ez[size - 1]
     ez[0] = ez[1]
+    ez[size - 1] = ez[size - 2]
 
     # update electric field
     for mm in ti.static(range(1, size)):
@@ -67,5 +65,5 @@ while gui.running:
     gui.text('Hy', (0.1, 0.6))
     colors = np.array([color(hi) for hi in hy.to_numpy() * imp0])
     gui.circles(pos=np.array([((i + 0.5) / size, 0.8)
-                              for i in range(size)]), radius=3, color=colors)
+                              for i in range(size-1)]), radius=3, color=colors)
     gui.show()
