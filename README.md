@@ -35,6 +35,14 @@
 ![1D Dielectric](gif/1d_dielectric.gif)
 
 - ABC at the left boundary
-- ABC at the right boundary
+- ABC at the right boundary (not working as expected due to non-unity relative permittivity)
 - TFSF boundary between `hy[49]` and `ez[50]`
 - A dielectric material starting at `ez[100]`
+
+### 1D Lossy
+
+![1D Lossy](gif/1d_lossy.gif)
+
+- ABC at the left boundary
+- TFSF boundary between `hy[49]` and `ez[50]`
+- A lossy dielectric material starting at `ez[100]`
