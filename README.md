@@ -27,3 +27,12 @@
 - ABC at the left boundary
 - ABC at the right boundary
 - TFSF boundary between `hy[49]` and `ez[50]`
+
+### 1D Dielectric
+
+![1D Dielectric](gif/1d_dielectric.gif)
+
+- ABC at the left boundary
+- ABC at the right boundary
+- TFSF boundary between `hy[49]` and `ez[50]`
+- A dielectric material starting at `ez[100]`

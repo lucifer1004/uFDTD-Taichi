@@ -6,3 +6,6 @@
 
 1Dtfsf:
 	gcc 1Dtfsf.c -lm -o ../dist/1Dtfsf
+
+1Ddielectric:
+	gcc 1Ddielectric.c -lm -o ../dist/1Ddielectric
