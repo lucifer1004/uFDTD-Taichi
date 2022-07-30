@@ -13,14 +13,14 @@ imp0 = 377.0
 def update(t: int):  # do time stepping
     # simple ABC for hy[size - 1]
     hy[size - 1] = hy[size - 2]
-    
+
     # update magnetic field
     for mm in ti.static(range(size - 1)):
         hy[mm] += (ez[mm + 1] - ez[mm]) / imp0
-        
+
     # correction for Hy adjacent to TFSF boundary
     hy[49] -= ti.exp(-(t - 30) ** 2 / 100) / imp0
-    
+
     # simple ABC for ez[0]
     ez[0] = ez[1]
 
