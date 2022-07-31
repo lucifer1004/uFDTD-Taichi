@@ -65,7 +65,7 @@ def color(v: float):
 
 width = 1280
 height = 320
-gui = ti.GUI("1D Total Field / Scattered Field", res=(width, height))
+gui = ti.GUI("1D Matched", res=(width, height))
 t = 0
 init()
 
