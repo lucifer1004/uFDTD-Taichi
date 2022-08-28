@@ -100,5 +100,5 @@ let
         end
     end every 10
 
-    gif(anim, joinpath(@__DIR__, "..", "gif", "abcdemo1.gif"), fps=15)
+    gif(anim, joinpath(@__DIR__, "..", "gif", "abcfirst.gif"), fps=15)
 end

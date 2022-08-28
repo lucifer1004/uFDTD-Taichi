@@ -16,6 +16,7 @@ Table of Contents:
     - [1D Matched](#1d-matched)
   - [Chapter 6. Differential-Equation Based Absorbing Boundary Conditions](#chapter-6-differential-equation-based-absorbing-boundary-conditions)
     - [First Order ABC](#first-order-abc)
+    - [Second Order ABC](#second-order-abc)
 
 ## Chapter 3. Introduction to the FDTD method
 
@@ -73,8 +74,16 @@ Table of Contents:
 
 ### First Order ABC
 
-![First Order ABC](gif/abcdemo1.gif)
+![First Order ABC](gif/abcfirst.gif)
 
 - First order ABC at left and right boundaries
+- TFSF boundary between `hy[49]` and `ez[50]`
+- A dielectric material starting at `ez[100]`
+
+### Second Order ABC
+
+![Second Order ABC](gif/abcsecond.gif)
+
+- Second order ABC at left and right boundaries
 - TFSF boundary between `hy[49]` and `ez[50]`
 - A dielectric material starting at `ez[100]`

@@ -5,9 +5,9 @@ name = "ufdtd-taichi"
 version = "0.1.0"
 
 [tool.poetry.dependencies]
-numpy = "^1.23.1"
+numpy = "^1.23.2"
 python = ">=3.10,<3.11"
-taichi = "^1.0.4"
+taichi = "^1.1.2"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
