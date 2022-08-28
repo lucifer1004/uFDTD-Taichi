@@ -70,7 +70,7 @@
 
 ### First Order ABC
 
-![First Order ABC](gif/abcfirst.gif)
+![First Order ABC](gif/1d_first_order_abc.gif)
 
 - First order ABC at left and right boundaries
 - TFSF boundary between `hy[49]` and `ez[50]`
@@ -78,7 +78,7 @@
 
 ### Second Order ABC
 
-![Second Order ABC](gif/abcsecond.gif)
+![Second Order ABC](gif/1d_second_order_abc.gif)
 
 - Second order ABC at left and right boundaries
 - TFSF boundary between `hy[49]` and `ez[50]`

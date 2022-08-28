@@ -10,12 +10,10 @@ let
     cezh = ti.field(dtype=ti.f64, shape=(size,))
     chyh = ti.field(dtype=ti.f64, shape=(size - 1,))
     chye = ti.field(dtype=ti.f64, shape=(size - 1,))
-    abc_coef_left = ti.field(dtype=ti.f64, shape=(3,))
-    abc_coef_right = ti.field(dtype=ti.f64, shape=(3,))
-    ez_old_left1 = ti.field(dtype=ti.f64, shape=(3,))
-    ez_old_left2 = ti.field(dtype=ti.f64, shape=(3,))
-    ez_old_right1 = ti.field(dtype=ti.f64, shape=(3,))
-    ez_old_right2 = ti.field(dtype=ti.f64, shape=(3,))
+    abc_coef_left = ti.field(dtype=ti.f64, shape=())
+    abc_coef_right = ti.field(dtype=ti.f64, shape=())
+    ez_old_left = ti.field(dtype=ti.f64, shape=())
+    ez_old_right = ti.field(dtype=ti.f64, shape=())
     imp0 = 377.0
     cdtds = 1.0 # Courant number
     delay = 30.0
@@ -44,38 +42,22 @@ let
 
     init_abc = @ti_kernel () -> begin
         tmp = ti.sqrt(cezh[0] * chye[0])
-        tmp2 = 1.0 / tmp + 2.0 + tmp
-        abc_coef_left[0] = -(1.0 / tmp - 2.0 + tmp) / tmp2
-        abc_coef_left[1] = -2.0 * (tmp - 1.0 / tmp) / tmp2
-        abc_coef_left[2] = 4.0 * (tmp + 1.0 / tmp) / tmp2
+        abc_coef_left[nothing] = (tmp - 1.0) / (tmp + 1.0)
 
         tmp = ti.sqrt(cezh[size-1] * chye[size-2])
-        tmp2 = 1.0 / tmp + 2.0 + tmp
-        abc_coef_right[0] = -(1.0 / tmp - 2.0 + tmp) / tmp2
-        abc_coef_right[1] = -2.0 * (tmp - 1.0 / tmp) / tmp2
-        abc_coef_right[2] = 4.0 * (tmp + 1.0 / tmp) / tmp2
+        abc_coef_right[nothing] = (tmp - 1.0) / (tmp + 1.0)
 
         return nothing
     end
 
     update_abc = @ti_kernel () -> begin
         # ABC for left side of grid
-        ez[0] = abc_coef_left[0] * (ez[2] + ez_old_left2[0]) +
-                abc_coef_left[1] * (ez_old_left1[0] + ez_old_left1[2] - ez[1] - ez_old_left2[1]) +
-                abc_coef_left[2] * ez_old_left1[1] - ez_old_left2[2]
+        ez[0] = ez_old_left[nothing] + abc_coef_left[nothing] * (ez[1] - ez[0])
+        ez_old_left[nothing] = ez[1]
 
         # ABC for right side of grid
-        ez[size-1] = abc_coef_right[0] * (ez[size-3] + ez_old_right2[0]) +
-                     abc_coef_right[1] * (ez_old_right1[0] + ez_old_right1[2] - ez[size-2] - ez_old_right2[1]) +
-                     abc_coef_right[2] * ez_old_right1[1] - ez_old_right2[2]
-
-        for mm in ez_old_left1
-            ez_old_left2[mm] = ez_old_left1[mm]
-            ez_old_left1[mm] = ez[mm]
-
-            ez_old_right2[mm] = ez_old_right1[mm]
-            ez_old_right1[mm] = ez[size-1-mm]
-        end
+        ez[size-1] = ez_old_right[nothing] + abc_coef_right[nothing] * (ez[size-2] - ez[size-1])
+        ez_old_right[nothing] = ez[size-2]
 
         return nothing
     end
@@ -118,5 +100,5 @@ let
         end
     end every 10
 
-    gif(anim, joinpath(@__DIR__, "..", "gif", "abcsecond.gif"), fps=15)
+    gif(anim, joinpath(@__DIR__, "..", "gif", "1d_first_order_abc.gif"), fps=15)
 end
